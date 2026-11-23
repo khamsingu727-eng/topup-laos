@@ -549,21 +549,6 @@ function removeMenuItem(idx) {
   renderMenuLotto();
 }
 
-function expandFullName(idx) {
-  const item = mLottoItems[idx];
-  const group = FULL_NAME_MAP[item.num];
-  if (!group) {
-    alert("ບໍ່ພົບຄົບນາມສຳລັບເລກ " + item.num);
-    return;
-  }
-  const newEntries = group
-    .filter(n => n !== item.num)
-    .map(n => ({ num: n, amt: item.amt }));
-
-  mLottoItems.splice(idx + 1, 0, ...newEntries);
-  renderMenuLotto();
-}
-
 function renderMenuLotto() {
   const listEl = document.getElementById('mLottoList');
 
