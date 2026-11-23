@@ -375,6 +375,12 @@
   }
 }
 
+function sendWhatsApp() {
+  const target = document.getElementById('targetInput')?.value.trim();
+  if (!target) {
+    alert("ກະລຸນາໃສ່ເບີໂທ ຫຼື UID ເກມກ່ອນສັ່ງຊື້!");
+    return;
+  }
 
     renderList("list-card", data.card, "ບັດເຕີມຫຼັກ 9");
     renderList("list-unitel-short", data.unitelShort, "ເນັດຫຼັກ 9 (Unitel)");
