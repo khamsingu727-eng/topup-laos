@@ -372,6 +372,187 @@
     renderList("list-ltc-short", data.ltcShort, "ເນັດຫຼັກ 5 (LTC)");
     renderList("list-ltc-month", data.ltcMonth, "ເນັດຫຼັກ 5 (LTC)");
     renderList("list-ltc-long", data.ltcLong, "ເນັດຫຼັກ 5 (LTC)");
-  </script>
+  </script><div id="laosLottoApp" style="max-width:520px; margin:16px auto; background:#f8f9fa; border-radius:16px; overflow:hidden; border:1px solid #eceff1; font-family:inherit; box-shadow:0 4px 14px rgba(0,0,0,0.08);">
+  <!-- ແຖບຫົວຂໍ້ -->
+  <div style="background:#fff; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee;">
+    <strong style="color:#f46524; font-size:17px;">ຊື້ເລກ</strong>
+    <span style="background:#fff3ec; color:#f46524; font-size:12px; font-weight:bold; padding:4px 10px; border-radius:999px;">ໂອນ -15% | ໜີ້ -5%</span>
+  </div>
+
+  <!-- ແຖບໝວດເລກ -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; background:#fff; padding:8px 12px; border-bottom:1px solid #eee;">
+    <button type="button" id="tab26" onclick="setLottoTab('ເລກ 2-6 ໂຕ', this)" style="background:#f46524; color:#fff; border:none; border-radius:10px; padding:8px 6px; font-weight:bold; font-size:13px; cursor:pointer;">ເລກ 2-6 ໂຕ</button>
+    <button type="button" onclick="setLottoTab('ຫວຍ Happy', this)" style="background:#f1f3f5; color:#333; border:none; border-radius:10px; padding:8px 6px; font-weight:bold; font-size:13px; cursor:pointer;">ຫວຍ Happy</button>
+    <button type="button" onclick="setLottoTab('ເລກນາມສັດ', this)" style="background:#f1f3f5; color:#333; border:none; border-radius:10px; padding:8px 6px; font-weight:bold; font-size:13px; cursor:pointer;">ເລກນາມສັດ</button>
+  </div>
+
+  <!-- ແຖບເຄື່ອງມື: ຕຳລາ / ສຸ່ມ / ສະຫຼັບ / ປ້ອນເລກ / ເງິນ / ເພີ່ມ -->
+  <div style="background:#fff; padding:10px 12px; display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; border-bottom:1px solid #eee; align-items:center;">
+    <button type="button" onclick="pickAnimalSample()" style="background:#43c69b; color:#fff; border:none; border-radius:10px; padding:8px 2px; font-size:12px; font-weight:bold; cursor:pointer;">ຕຳລາ</button>
+    <button type="button" onclick="randomLottoNum()" style="background:#26a667; color:#fff; border:none; border-radius:10px; padding:8px 2px; font-size:12px; font-weight:bold; cursor:pointer;">ສຸ່ມ</button>
+    <button type="button" onclick="swapLottoNum()" style="background:#2196f3; color:#fff; border:none; border-radius:10px; padding:8px 2px; font-size:12px; font-weight:bold; cursor:pointer;">ສະຫຼັບ</button>
+    <input type="text" id="quickNum" placeholder="ເລກ" style="border:1px solid #ddd; border-radius:10px; padding:8px 4px; text-align:center; font-size:14px; font-weight:bold; width:100%; box-sizing:border-box;">
+    <input type="number" id="quickAmt" value="5000" step="1000" style="border:1px solid #ddd; border-radius:10px; padding:8px 2px; text-align:center; font-size:13px; font-weight:bold; color:#f46524; width:100%; box-sizing:border-box;">
+    <button type="button" onclick="addQuickLotto()" style="background:#f46524; color:#fff; border:none; border-radius:10px; padding:8px 2px; font-size:12px; font-weight:bold; cursor:pointer;">+ ເພີ່ມ</button>
+  </div>
+
+  <!-- ລາຍການເລກທີ່ເພີ່ມແລ້ວ -->
+  <div id="lottoCartList" style="padding:10px 12px; min-height:90px; background:#f8f9fa;"></div>
+
+  <!-- ວິທີຊຳລະ & ສ່ວນຫຼຸດ (ໂອນໃຊ້ຊື່ -15% / ຕິດໜີ້ -5%) -->
+  <div style="background:#fff; padding:12px; border-top:1px solid #eee;">
+    <div style="font-size:13px; font-weight:bold; color:#333; margin-bottom:6px;">ວິທີຊຳລະເງິນ:</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+      <label style="display:flex; align-items:center; gap:6px; padding:9px; border:1.5px solid #f46524; background:#fff7f3; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer;">
+        <input type="radio" name="lottoPayMode" value="transfer" checked onchange="renderLottoCart()">
+        <span>ໂອນໃຊ້ຊື່ (-15%)</span>
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; padding:9px; border:1.5px solid #ddd; background:#fafafa; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer;">
+        <input type="radio" name="lottoPayMode" value="debt" onchange="renderLottoCart()">
+        <span>ຕິດໜີ້ (-5%)</span>
+      </label>
+    </div>
+
+    <input type="text" id="lottoBuyerName" placeholder="ຊື່ຜູ້ໂອນ / ຊື່ຜູ້ຕິດໜີ້..." style="width:100%; padding:9px; border-radius:10px; border:1px solid #ddd; font-size:14px; box-sizing:border-box; margin-bottom:8px;">
+    <input type="text" id="lottoPayNote" placeholder="ວັນນັດຈ່າຍ (ຖ້າຕິດໜີ້) / ໝາຍເຫດ..." style="width:100%; padding:9px; border-radius:10px; border:1px solid #ddd; font-size:14px; box-sizing:border-box; margin-bottom:10px;">
+
+    <div style="background:#f8f9fa; border-radius:10px; padding:10px; font-size:13px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+        <span>ຍອດເຕັມ:</span>
+        <strong id="lottoSubTotal">0 ກີບ</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; color:#2e7d32; margin-bottom:4px;">
+        <span id="lottoDiscTitle">ສ່ວນຫຼຸດໂອນໃຊ້ຊື່ (15%):</span>
+        <strong id="lottoDiscAmt">-0 ກີບ</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:15px; color:#f46524; border-top:1px dashed #ddd; padding-top:6px;">
+        <strong>ຍອດສຸດທິ:</strong>
+        <strong id="lottoNetTotal">0 ກີບ</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ແຖບລຸ່ມແບບໃນຮູບ: ລວມ + ປຸ່ມຊຳລະ -->
+  <div style="display:grid; grid-template-columns:1.4fr 1fr; align-items:center; background:#555; color:#fff;">
+    <div style="padding:12px 14px; font-size:15px;">
+      ລວມ: <strong id="lottoBottomTotal" style="font-size:17px;">0 ກີບ</strong>
+    </div>
+    <button type="button" onclick="checkoutLotto()" style="background:#f46524; color:#fff; border:none; padding:14px; font-size:16px; font-weight:bold; cursor:pointer;">ຊຳລະ</button>
+  </div>
+</div>
+
+<script>
+let lottoTab = 'ເລກ 2-6 ໂຕ';
+let lottoItems = [
+  { label: 'ກົບ', num: '24', amt: 2000, full: false },
+  { label: 'ກົບ', num: '64', amt: 2000, full: false }
+];
+
+function setLottoTab(tabName, btn) {
+  lottoTab = tabName;
+  btn.parentElement.querySelectorAll('button').forEach(b => {
+    b.style.background = '#f1f3f5';
+    b.style.color = '#333';
+  });
+  btn.style.background = '#f46524';
+  btn.style.color = '#fff';
+}
+
+function addQuickLotto() {
+  const numEl = document.getElementById('quickNum');
+  const amtEl = document.getElementById('quickAmt');
+  const num = numEl.value.trim();
+  const amt = parseInt(amtEl.value, 10) || 0;
+  if (!num || amt <= 0) return;
+  lottoItems.push({ label: lottoTab, num, amt, full: false });
+  numEl.value = '';
+  renderLottoCart();
+}
+
+function randomLottoNum() {
+  const n = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+  document.getElementById('quickNum').value = n;
+}
+
+function swapLottoNum() {
+  const el = document.getElementById('quickNum');
+  const v = el.value.trim();
+  if (v.length >= 2) {
+    el.value = v[1] + v[0] + v.slice(2);
+  }
+}
+
+function pickAnimalSample() {
+  const animals = [
+    { label: 'ງູ', num: '72' },
+    { label: 'ເຕົ່າ', num: '67' },
+    { label: 'ໄກ່', num: '28' },
+    { label: 'ປາຄໍ່', num: '01' }
+  ];
+  const pick = animals[Math.floor(Math.random() * animals.length)];
+  const amt = parseInt(document.getElementById('quickAmt').value, 10) || 5000;
+  lottoItems.push({ label: pick.label, num: pick.num, amt, full: false });
+  renderLottoCart();
+}
+
+function changeLottoAmt(idx, delta) {
+  lottoItems[idx].amt = Math.max(1000, lottoItems[idx].amt + delta);
+  renderLottoCart();
+}
+
+function toggleLottoFull(idx) {
+  lottoItems[idx].full = !lottoItems[idx].full;
+  renderLottoCart();
+}
+
+function removeLottoItem(idx) {
+  lottoItems.splice(idx, 1);
+  renderLottoCart();
+}
+
+function renderLottoCart() {
+  const listEl = document.getElementById('lottoCartList');
+  listEl.innerHTML = lottoItems.map((it, i) => `
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #eceff1; border-radius:10px; padding:8px 10px; margin-bottom:6px; font-size:14px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <strong style="color:#555;">${it.label}</strong>
+        <strong style="color:#111; font-size:15px;">${it.num}</strong>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button type="button" onclick="changeLottoAmt(${i}, -1000)" style="width:24px; height:24px; border-radius:50%; border:1px solid #f46524; background:#fff; color:#f46524; font-weight:bold; cursor:pointer;">-</button>
+        <strong style="min-width:62px; text-align:center;">${it.amt.toLocaleString()}</strong>
+        <button type="button" onclick="changeLottoAmt(${i}, 1000)" style="width:24px; height:24px; border-radius:50%; border:1px solid #f46524; background:#fff; color:#f46524; font-weight:bold; cursor:pointer;">+</button>
+        <button type="button" onclick="toggleLottoFull(${i})" style="border:1px solid #f46524; background:${it.full ? '#f46524' : '#fff7f3'}; color:${it.full ? '#fff' : '#f46524'}; border-radius:8px; padding:3px 7px; font-size:11px; font-weight:bold; cursor:pointer;">ເຕັມນາມ</button>
+        <button type="button" onclick="removeLottoItem(${i})" style="border:none; background:none; color:#e53935; font-size:16px; font-weight:bold; cursor:pointer;">×</button>
+      </div>
+    </div>
+  `).join('');
+
+  const subTotal = lottoItems.reduce((sum, item) => sum + item.amt, 0);
+  const mode = document.querySelector('input[name="lottoPayMode"]:checked').value;
+  const rate = (mode === 'transfer') ? 0.15 : 0.05;
+  const disc = Math.round(subTotal * rate);
+  const net = Math.max(0, subTotal - disc);
+
+  document.getElementById('lottoSubTotal').textContent = subTotal.toLocaleString() + ' ກີບ';
+  document.getElementById('lottoDiscTitle').textContent = (mode === 'transfer')
+    ? 'ສ່ວນຫຼຸດໂອນໃຊ້ຊື່ (15%):'
+    : 'ສ່ວນຫຼຸດຕິດໜີ້ (5%):';
+  document.getElementById('lottoDiscAmt').textContent = '-' + disc.toLocaleString() + ' ກີບ';
+  document.getElementById('lottoNetTotal').textContent = net.toLocaleString() + ' ກີບ';
+  document.getElementById('lottoBottomTotal').textContent = net.toLocaleString() + ' ກີບ';
+}
+
+function checkoutLotto() {
+  const name = document.getElementById('lottoBuyerName').value.trim();
+  const note = document.getElementById('lottoPayNote').value.trim();
+  const mode = document.querySelector('input[name="lottoPayMode"]:checked').value;
+  const modeText = (mode === 'transfer') ? 'ໂອນໃຊ້ຊື່ (-15%)' : 'ຕິດໜີ້ (-5%)';
+  alert(`ລາຍການຊື້ເລກ:\n- ຊຳລະ: ${modeText}\n- ຊື່: ${name || '-'}\n- ໝາຍເຫດ/ນັດຈ່າຍ: ${note || '-'}\n- ຍອດສຸດທິ: ${document.getElementById('lottoNetTotal').textContent}`);
+}
+
+renderLottoCart();
+</script>
+
 </body>
 </html>
