@@ -501,6 +501,30 @@ function openLottoMenu() {
 function closeLottoMenu() {
   document.getElementById('lottoMenuModal').style.display = 'none';
 }
+function expandFullName(idx) {
+  const item = mLottoItems[idx];
+  const raw = String(item.num).trim();
+  if (raw.length < 2) return;
+
+  const prefix = raw.slice(0, -2);
+  const lastTwo = raw.slice(-2);
+  const group = FULL_NAME_MAP[lastTwo];
+
+  if (!group) {
+    alert("ບໍ່ພົບຄົບນາມສຳລັບເລກ " + raw);
+    return;
+  }
+
+  const fullList = group.map(two => prefix + two);
+  const newEntries = fullList
+    .filter(n => n !== raw)
+    .map(n => ({ num: n, amt: item.amt }));
+
+  if (newEntries.length === 0) return;
+
+  mLottoItems.splice(idx + 1, 0, ...newEntries);
+  renderMenuLotto();
+}
 
 function addMenuLotto() {
   const numEl = document.getElementById('mLottoNum');
