@@ -581,7 +581,33 @@ function renderMenuLotto() {
     : 'ສ່ວນຫຼຸດຕິດໜີ້ (5%):';
   document.getElementById('mDiscAmt').textContent = '-' + disc.toLocaleString() + ' ກີບ';
   document.getElementById('mNetTotal').textContent = net.toLocaleString() + ' ກີບ';
-  document.getElementById('mBottomTotal').textContent = net.toLocaleString() + ' ກີບ';
+  document.getElementById('mBottomTotal').textContent = net.toLocaleString() + ' ກີບ;
+    const FB_khamsing_USER = "YOUR_FB_USERNAME"; // ປ່ຽນເປັນຊື່ Facebook / ເພຈ ຂອງເຈົ້າ
+
+function getLottoMessageText() {
+  const name = document.getElementById('mCustomerName')?.value.trim() || '-';
+  const note = document.getElementById('mDueNote')?.value.trim() || '-';
+  const mode = document.querySelector('input[name="mPayType"]:checked')?.value || 'transfer';
+  const modeText = (mode === 'transfer') ? 'ໂອນໃຊ້ຊື່ (-15%)' : 'ຕິດໜີ້ (-5%)';
+  const itemsText = mLottoItems.map(x => `${x.num} = ${Number(x.amt).toLocaleString()} ກີບ`).join('\n');
+
+  const subTotal = document.getElementById('mSubTotal')?.textContent || '0 ກີບ';
+  const discLabel = document.getElementById('mDiscLabel')?.textContent || '';
+  const discAmt = document.getElementById('mDiscAmt')?.textContent || '0 ກີບ';
+  const netTotal = document.getElementById('mNetTotal')?.textContent || '0 ກີບ';
+
+  return (
+    `ສະບາຍດີ ສັ່ງຊື້ເລກ\n` +
+    `------------------\n` +
+    `${itemsText}\n` +
+    `------------------\n` +
+    `ຊຳລະ: ${modeText}\n` +
+    `ຊື່: ${name}\n` +
+    `ໝາຍເຫດ/ມັດຈ່າຍ: ${note}\n` +
+    `ຍອດເຕັມ: ${subTotal}\n` +
+    `${discLabel} ${discAmt}\n` +
+    `ຍອດຕ້ອງຈ່າຍ: ${netTotal}`
+  );
 }
 
 function sendLottoWhatsApp() {
@@ -589,6 +615,23 @@ function sendLottoWhatsApp() {
     alert("ກະລຸນາເພີ່ມເລກກ່ອນຊຳລະ!");
     return;
   }
+  const choice = prompt("ພິມ 1 ເພື່ອສົ່ງຜ່ານ WhatsApp\nພິມ 2 ເພື່ອສົ່ງຜ່ານ Messenger", "1");
+  if (!choice) return;
+
+  const msg = getLottoMessageText();
+  if (choice.trim() === "2") {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).catch(() => {});
+    }
+    const fbUrl = `https://m.me/${encodeURIComponent(FB_MESSENGER_USER)}?text=${encodeURIComponent(msg)}`;
+    window.open(fbUrl, "_blank");
+  } else {
+    const waUrl = `https://wa.me/8562095281677?text=${encodeURIComponent(msg)}`;
+    window.open(waUrl, "_blank");
+  }
+}
+
+    
   const name = document.getElementById('mCustomerName').value.trim();
   const note = document.getElementById('mDueNote').value.trim();
   const mode = document.querySelector('input[name="mPayType"]:checked').value;
