@@ -351,12 +351,6 @@
       }
     }
 
-   function sendWhatsApp() {
-  const target = document.getElementById('targetInput')?.value.trim();
-  if (!target) {
-    alert("ກະລຸນາໃສ່ເບີໂທ ຫຼື UID ເກມກ່ອນສັ່ງຊື້!");
-    return;
-  }
 
   const choice = prompt("ພິມ 1 ເພື່ອສົ່ງຜ່ານ WhatsApp\nພິມ 2 ເພື່ອສົ່ງຜ່ານ Messenger", "1");
   if (!choice) return;
