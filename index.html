@@ -351,15 +351,30 @@
       }
     }
 
-    function sendWhatsApp() {
-      const target = document.getElementById("customerTarget").value.trim();
-      if (!target) {
-        alert("ກະລຸນາໃສ່ເບີໂທ ຫຼື UID ເກມກ່ອນສັ່ງຊື້!");
-        return;
-      }
-      const msg = `ສະບາຍດີ ແຈ້ງສັ່ງຊື້:\n- ໝວດ: ${currentCatName}\n- ແພັກເກັດ: ${selectedPkgName}\n- ເບີໂທ / ID: ${target}\n- ຍອດທີ່ຕ້ອງໂອນ: ${selectedPriceText}\n(ຂ້ອຍກຳລັງແນບສະລິບໃຫ້)`;
-      window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(msg)}`, "_blank");
+   function sendWhatsApp() {
+  const target = document.getElementById('targetInput')?.value.trim();
+  if (!target) {
+    alert("ກະລຸນາໃສ່ເບີໂທ ຫຼື UID ເກມກ່ອນສັ່ງຊື້!");
+    return;
+  }
+
+  const choice = prompt("ພິມ 1 ເພື່ອສົ່ງຜ່ານ WhatsApp\nພິມ 2 ເພື່ອສົ່ງຜ່ານ Messenger", "1");
+  if (!choice) return;
+
+  const msg = document.getElementById('orderSummaryText')?.innerText || `ສັ່ງຊື້: ${target}`;
+
+  if (choice.trim() === "2") {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).catch(() => {});
     }
+    const fbUrl = `https://m.me/${encodeURIComponent(FB_MESSENGER_USER)}?text=${encodeURIComponent(msg)}`;
+    window.open(fbUrl, "_blank");
+  } else {
+    const waPhone = (typeof myWhatsApp !== "undefined" && myWhatsApp) ? myWhatsApp : "8562095281677";
+    window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+}
+
 
     renderList("list-card", data.card, "ບັດເຕີມຫຼັກ 9");
     renderList("list-unitel-short", data.unitelShort, "ເນັດຫຼັກ 9 (Unitel)");
@@ -659,30 +674,6 @@ function sendLottoWhatsApp() {
   }
 }
 
-    
-  const name = document.getElementById('mCustomerName').value.trim();
-  const note = document.getElementById('mDueNote').value.trim();
-  const mode = document.querySelector('input[name="mPayType"]:checked').value;
-  const modeText = (mode === 'transfer') ? 'ໂອນໃຊ້ຊື່ (-15%)' : 'ຕິດໜີ້ (-5%)';
-  const itemsText = mLottoItems.map(x => `${x.num} = ${x.amt.toLocaleString()} ກີບ`).join('\n');
-
-  const msg =
-    `ສະບາຍດີ ສັ່ງອໍເດີເລກ\n` +
-    `-----------------\n` +
-    `${itemsText}\n` +
-    `-----------------\n` +
-    `ຊຳລະ: ${modeText}\n` +
-    `ຊື່: ${name || '-'}\n` +
-    `ໝາຍເຫດ/ນັດຈ່າຍ: ${note || '-'}\n` +
-    `ຍອດເຕັມ: ${document.getElementById('mSubTotal').textContent}\n` +
-    `${document.getElementById('mDiscLabel').textContent} ${document.getElementById('mDiscAmt').textContent}\n` +
-    `ຍອດຕ້ອງຈ່າຍ: ${document.getElementById('mNetTotal').textContent}`;
-
-  const waUrl = `https://wa.me/8562095281677?text=${encodeURIComponent(msg)}`;
-  window.open(waUrl, '_blank');
-}
-
-renderMenuLotto();
 </script>
 
 </body>
